@@ -5,15 +5,7 @@
 import random
 import pygame
 
-START="s"
-FINISH="f" 
-FLOOR="0"
-WALL="1"
-
-LEVEL_HEIGHT=15
-LEVEL_WIDTH=15
-ITEMS=["NEEDLE","TUBE","ETHER"]
-
+from constants import *
 
 
 class Map:
@@ -21,12 +13,12 @@ class Map:
     def __init__(self,level_file):
         self.level_file=level_file
         self.generate_map()
-        #self.generate_objects()
+        self.generate_items()
         
     def generate_map(self):
         with open(self.level_file,'r') as f:
             self.map=[list(x)[:-1] for x in f]
-        print(self.map)
+        return self.map
 
     def generate_items(self):
         for item in ITEMS:
@@ -36,7 +28,29 @@ class Map:
                self.x_item=random.randint(0,LEVEL_WIDTH-1)
                self.y_item=random.randint(0,LEVEL_HEIGHT-1)
             self.map[self.x_item][self.y_item]=item
-        print(self.map)
+        return self.map
+
+    def show_elements(self):
+        screen=pygame.display.set_mode(LEVEL_DIMENSION)
+        screen.blit(pygame.image.load("Images/fond.jpg").convert_alpha(),(0,0))
+        for y in range(0,LEVEL_HEIGHT):
+            for x in range(0,LEVEL_WIDTH):
+                if self.map[y][x] == WALL:
+                    screen.blit(wall,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                elif self.map[y][x] == FINISH:
+                    screen.blit(guardian,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                elif self.map[y][x] == "NEEDLE":
+                    screen.blit(needle,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                elif self.map[y][x] == "TUBE":
+                    screen.blit(tube,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                elif self.map[y][x] == "ETHER":
+                    screen.blit(ether,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                elif self.map[y][x] == START:
+                    screen.blit(macgyver,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+        pygame.display.flip()
+        pygame.time.delay(5000)
+    
+
 
 class Hero:
     def __init__(self,x_pos,y_pos,map):
@@ -71,9 +85,11 @@ class Hero:
 
 def main():
     pygame.init()
-    screen=pygame.display.set_mode(LEVEL_HEIGHT,LEVEL_WIDTH)
     map=Map('level')
+    map.show_elements()
     
+    
+
 
 if __name__=="__main__":
     main()
