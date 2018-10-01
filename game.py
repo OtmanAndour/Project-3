@@ -50,6 +50,7 @@ class Map:
                 elif self.map[y][x] == START:
                     screen.blit(macgyver,(x*SPRITE_SIZE,y*SPRITE_SIZE))
         pygame.display.flip()
+        pygame.time.delay(10000)
         
     
 
@@ -89,10 +90,30 @@ def main():
     pygame.init()
     map=Map('level')
     map.show_elements()
+    hero=Hero(0,0,map)
     play = 1
     while play == 1:
         for event in pygame.event.get():
             if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
+                play = 0
+        
+            if event.type == KEYDOWN:
+                if event.type == K_DOWN:
+                    macgyver.move("down")
+
+            if event.type == KEYDOWN:
+                if event.type == K_UP:
+                    macgyver.move("up")
+
+            if event.type == KEYDOWN:
+                if event.type == K_LEFT:
+                    macgyver.move("left")
+
+            if event.type == KEYDOWN:
+                if event.type == K_RIGHT:
+                   macgyver.move("right")
+
+            
     
 
 
