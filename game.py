@@ -5,6 +5,8 @@
 import random
 import pygame
 
+from pygame.locals import QUIT, KEYDOWN, K_F1, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
+
 from constants import *
 
 
@@ -48,7 +50,7 @@ class Map:
                 elif self.map[y][x] == START:
                     screen.blit(macgyver,(x*SPRITE_SIZE,y*SPRITE_SIZE))
         pygame.display.flip()
-        pygame.time.delay(5000)
+        
     
 
 
@@ -87,7 +89,10 @@ def main():
     pygame.init()
     map=Map('level')
     map.show_elements()
-    
+    play = 1
+    while play == 1:
+        for event in pygame.event.get():
+            if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
     
 
 
