@@ -5,7 +5,7 @@
 import random
 import pygame
 
-from pygame.locals import QUIT, KEYDOWN, K_F1, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
+from pygame import QUIT, KEYDOWN, K_F1, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
 
 from constants import *
 
@@ -16,6 +16,7 @@ class Map:
         self.level_file=level_file
         self.generate_map()
         self.generate_items()
+        self.screen=pygame.display.set_mode(LEVEL_DIMENSION)
         
     def generate_map(self):
         with open(self.level_file,'r') as f:
@@ -33,29 +34,34 @@ class Map:
         return self.map
 
     def show_elements(self):
-        screen=pygame.display.set_mode(LEVEL_DIMENSION)
-        screen.blit(pygame.image.load("Images/fond.jpg").convert_alpha(),(0,0))
+        #self.screen=pygame.display.set_mode(LEVEL_DIMENSION)
+        self.screen.blit(pygame.image.load("Images/fond.jpg").convert_alpha(),(0,0))
         for y in range(0,LEVEL_HEIGHT):
             for x in range(0,LEVEL_WIDTH):
                 if self.map[y][x] == WALL:
-                    screen.blit(wall,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(wall,(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == FINISH:
-                    screen.blit(guardian,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(guardian,(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "NEEDLE":
-                    screen.blit(needle,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(needle,(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "TUBE":
-                    screen.blit(tube,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(tube,(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "ETHER":
-                    screen.blit(ether,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(ether,(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == START:
-                    screen.blit(macgyver,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(macgyver,(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                else:
+                    self.screen.blit(floor,(x*SPRITE_SIZE,y*SPRITE_SIZE)) 
         pygame.display.flip()
-        pygame.time.delay(10000)
+        
+
+    
         
     
 
 
 class Hero:
+    
     def __init__(self,x_pos,y_pos,map):
         self.x=x_pos
         self.y=y_pos
@@ -65,23 +71,23 @@ class Hero:
     def move(self,direction):
 #This is how MacGiver is going to be moved, but i still need to figure out how to define down,up,left and right with pygame probably
         if direction == "down":
-            if self.y <= LEVEL_HEIGHT:
-                if self.map[self.y + 1][self.x] != WALL:
+            if self.y < LEVEL_HEIGHT-1:
+                if self.map.map[self.y + 1][self.x] != WALL:
                     self.y +=1
         
         elif direction == "up":
-            if self.y <= LEVEL_HEIGHT:
-                if self.map[self.y - 1][self.x] != WALL:
+            if self.y != 0:
+                if self.map.map[self.y - 1][self.x] != WALL:
                     self.y -=1
         
         elif direction == "left":
-            if self.x <= LEVEL_WIDTH:
-                if self.map[self.y][self.x - 1] != WALL:
+            if self.x != 0:
+                if self.map.map[self.y][self.x - 1] != WALL:
                     self.x -=1
 
         elif direction == "right":
-            if self.y <= LEVEL_WIDTH:
-                if self.map[self.y][self.x + 1] != WALL:
+            if self.x < LEVEL_WIDTH-1:
+                if self.map.map[self.y][self.x + 1] != WALL:
                     self.x +=1
 
 
@@ -98,22 +104,19 @@ def main():
                 play = 0
         
             if event.type == KEYDOWN:
-                if event.type == K_DOWN:
-                    macgyver.move("down")
+                if event.key == K_DOWN:
+                    hero.move("down")
 
-            if event.type == KEYDOWN:
-                if event.type == K_UP:
-                    macgyver.move("up")
+                if event.key == K_UP:
+                    hero.move("up")
 
-            if event.type == KEYDOWN:
-                if event.type == K_LEFT:
-                    macgyver.move("left")
+                if event.key == K_LEFT:
+                    hero.move("left")
 
-            if event.type == KEYDOWN:
-                if event.type == K_RIGHT:
-                   macgyver.move("right")
-
-            
+                if event.key == K_RIGHT:
+                    hero.move("right")
+            map.screen.blit(macgyver,(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
+            pygame.display.flip()
     
 
 
