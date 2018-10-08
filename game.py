@@ -34,24 +34,21 @@ class Map:
         return self.map
 
     def show_elements(self):
-        #self.screen=pygame.display.set_mode(LEVEL_DIMENSION)
-        self.screen.blit(pygame.image.load("Images/fond.jpg").convert_alpha(),(0,0))
         for y in range(0,LEVEL_HEIGHT):
             for x in range(0,LEVEL_WIDTH):
+                self.screen.blit(PICTURES["floor"],(x*SPRITE_SIZE,y*SPRITE_SIZE)) 
                 if self.map[y][x] == WALL:
-                    self.screen.blit(IMAGES["wall"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(PICTURES["wall"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == FINISH:
-                    self.screen.blit(IMAGES["guardian"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(PICTURES["guardian"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "NEEDLE":
-                    self.screen.blit(IMAGES["needle"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(PICTURES["needle"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "TUBE":
-                    self.screen.blit(IMAGES["tube"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(PICTURES["tube"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == "ETHER":
-                    self.screen.blit(IMAGES["ether"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
+                    self.screen.blit(PICTURES["ether"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
                 elif self.map[y][x] == START:
-                    self.screen.blit(IMAGES["macgyver"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
-                else:
-                    self.screen.blit(IMAGES["floor"],(x*SPRITE_SIZE,y*SPRITE_SIZE)) 
+                    self.screen.blit(PICTURES["macgyver"],(x*SPRITE_SIZE,y*SPRITE_SIZE))
         pygame.display.flip()
         
 
@@ -92,8 +89,7 @@ class Hero:
         return self.map.map[self.y][self.x] == FINISH
 
 
-def main():
-    pygame.init()
+def gameplay():
     map=Map('level')
     map.show_elements()
     hero=Hero(0,0,map)
@@ -104,7 +100,7 @@ def main():
                 play = 0
         
             if event.type == KEYDOWN:
-                map.screen.blit(IMAGES["floor"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
+                map.screen.blit(PICTURES["floor"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
                 if event.key == K_DOWN:
                     hero.move("down")
 
@@ -120,24 +116,37 @@ def main():
             if hero.is_on_item():
                 hero.map.map[hero.y][hero.x]=FLOOR
                 hero.items += 1
-                map.screen.blit(IMAGES["floor"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
+                map.screen.blit(PICTURES["floor"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
             
-            map.screen.blit(IMAGES["macgyver"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
+            map.screen.blit(PICTURES["macgyver"],(hero.x*SPRITE_SIZE,hero.y*SPRITE_SIZE))
             pygame.display.flip()
 
             if hero.is_on_finish_line():
                 if hero.items != 3:
                     map.screen.blit(lost,(0,0))
+                    map.screen.blit(restart,(50,50))
                     pygame.display.flip()
                     play=0
-                    pygame.time.delay(5000)
 
                 if hero.items == 3:
                     map.screen.blit(victory,(0,0))
+                    map.screen.blit(restart,(50,50))
                     pygame.display.flip()
                     play=0
-                    pygame.time.delay(5000)
-    
 
+def main():
+    pygame.init()
+    screen=pygame.display.set_mode(LEVEL_DIMENSION)
+    screen.blit(intro,(0,0))
+    screen.blit(start,(100,50))
+    pygame.display.flip()
+    game=1
+    while game == 1:
+        for event in pygame.event.get():
+            if event.type == KEYDOWN and event.key == K_F1:
+                gameplay()
+            elif event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
+                game = 0
+    
 if __name__=="__main__":
     main()
