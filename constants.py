@@ -13,7 +13,7 @@ SPRITE_SIZE = 40
 LEVEL_DIMENSION = (LEVEL_HEIGHT*SPRITE_SIZE, LEVEL_WIDTH*SPRITE_SIZE)
 ITEMS = ["NEEDLE","TUBE","ETHER"]
 
-pygame.display.set_mode(LEVEL_DIMENSION) 
+pygame.display.set_mode(LEVEL_DIMENSION)
 pygame.font.init()
 myfont = pygame.font.SysFont('Comic Sans MS', 30)
 
