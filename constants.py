@@ -1,3 +1,5 @@
+"""File containing all the constants used by the game.py file"""
+
 import pygame
 
 START = "s"
