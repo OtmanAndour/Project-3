@@ -1,6 +1,5 @@
 import pygame
 
-
 START="s"
 FINISH="f" 
 FLOOR="0"
@@ -8,22 +7,23 @@ WALL="1"
 
 LEVEL_HEIGHT=15
 LEVEL_WIDTH=15
-SPRITE_SIZE=30
+SPRITE_SIZE=40
 LEVEL_DIMENSION=(LEVEL_HEIGHT*SPRITE_SIZE,LEVEL_WIDTH*SPRITE_SIZE)
 ITEMS=["NEEDLE","TUBE","ETHER"]
 
-pygame.display.set_mode(LEVEL_DIMENSION)
+pygame.display.set_mode(LEVEL_DIMENSION) 
 
+floor="Images/floor.jpg"
+wall="Images/wall.jpg"
+guardian="Images/Gardien.png"
+needle="Images/aiguille.png"
+tube="Images/seringue.png"
+ether="Images/ether.png"
+macgyver="Images/MacGyver.png"
+victory=pygame.transform.scale(pygame.image.load("Images/victory.jpg").convert_alpha(),(LEVEL_HEIGHT*SPRITE_SIZE,LEVEL_WIDTH*SPRITE_SIZE))
+lost=pygame.transform.scale(pygame.image.load("Images/lost.jpg").convert_alpha(),(LEVEL_HEIGHT*SPRITE_SIZE,LEVEL_WIDTH*SPRITE_SIZE))
 
-wall=pygame.image.load("Images/wall.jpg").convert_alpha()
-wall=pygame.transform.scale(wall,(SPRITE_SIZE,SPRITE_SIZE))
-guardian=pygame.image.load("Images/Gardien.png").convert_alpha()
-guardian=pygame.transform.scale(guardian,(SPRITE_SIZE,SPRITE_SIZE))
-needle=pygame.image.load("Images/aiguille.png").convert_alpha()
-needle=pygame.transform.scale(needle,(SPRITE_SIZE,SPRITE_SIZE))
-tube=pygame.image.load("Images/seringue.png").convert_alpha()
-tube=pygame.transform.scale(tube,(SPRITE_SIZE,SPRITE_SIZE))
-ether=pygame.image.load("Images/ether.png").convert_alpha()
-ether=pygame.transform.scale(ether,(SPRITE_SIZE,SPRITE_SIZE))
-macgyver=pygame.image.load("Images/MacGyver.png").convert_alpha()
-macgyver=pygame.transform.scale(macgyver,(SPRITE_SIZE,SPRITE_SIZE))
+IMAGES={"floor":floor,"wall":wall,"guardian":guardian,"needle":needle,"tube":tube,"ether":ether,"macgyver":macgyver}
+for key in IMAGES.keys():
+    IMAGES[key]=pygame.image.load(IMAGES[key]).convert_alpha()
+    IMAGES[key]=pygame.transform.scale(IMAGES[key],(SPRITE_SIZE,SPRITE_SIZE))
