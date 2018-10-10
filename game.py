@@ -6,6 +6,7 @@
 import random
 import sys
 import pygame
+import time
 from pygame import QUIT, KEYDOWN, K_F1, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
 from constants import *
 
@@ -17,6 +18,8 @@ class Map:
         self.generate_map()
         self.generate_items()
         self.screen = pygame.display.set_mode(LEVEL_DIMENSION)
+        self.x_start = 0
+        self.y_start = 0
         
     def generate_map(self):
         """ Create a matrix from the level file """
@@ -66,6 +69,7 @@ class Map:
                 elif self.map[y][x] == "ETHER":
                     self.screen.blit(PICTURES["ether"], (x*SPRITE_SIZE, y*SPRITE_SIZE))
                 elif self.map[y][x] == START:
+                    self.x_start, self.y_start = x, y
                     self.screen.blit(PICTURES["macgyver"], (x*SPRITE_SIZE, y*SPRITE_SIZE))
         pygame.display.flip()
         
@@ -113,9 +117,10 @@ def gameplay():
     """Function that sets up the game and makes it run"""
     map = Map('level')
     map.show_elements()
-    hero = Hero(0, 0, map)
+    hero = Hero(map.x_start, map.y_start, map)
     play = 1
     while play == 1:
+        time.sleep(0.01)
         """Loop for the game"""
         for event in pygame.event.get():
             """If ESC is pressed, exit the game and close the program"""
@@ -168,6 +173,7 @@ def main():
     pygame.display.flip()
     game = 1
     while game == 1:
+        time.sleep(0.01)
         for event in pygame.event.get():
             if event.type == KEYDOWN and event.key == K_F1:
                 gameplay()
