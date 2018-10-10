@@ -5,8 +5,8 @@
 
 import random
 import sys
-import pygame
 import time
+import pygame
 from pygame import QUIT, KEYDOWN, K_F1, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
 from constants import *
 
@@ -20,17 +20,20 @@ class Map:
         self.screen = pygame.display.set_mode(LEVEL_DIMENSION)
         self.x_start = 0
         self.y_start = 0
-        
+
     def generate_map(self):
         """ Create a matrix from the level file """
         with open(self.level_file, 'r') as f:
             self.map = [list(x)[:-1] for x in f]
         if not self.check_height():
-            print("Map height does not match set level height. Please change the value of LEVEL_HEIGHT accordingly.")
+            print("Map height does not match set level height." 
+            "Please change the value of LEVEL_HEIGHT or the level file accordingly.")
             sys.exit()
-        elif not self.check_width():
-            print("Map width does not match set level width. Please change the value of LEVEL_WIDTH accordingly.")
-            sys.exit()
+        for i in range(0, LEVEL_HEIGHT):
+            if not self.check_width(i):
+                print("Map width does not match set level width. "
+                "Please change the value of LEVEL_WIDTH or the level file accordingly.")
+                sys.exit()
         else:
             return self.map
 
@@ -38,9 +41,9 @@ class Map:
         "Checks if map height matches the level height"
         return len(self.map) == LEVEL_HEIGHT
 
-    def check_width(self):
+    def check_width(self, i):
         "Checks if map widht matches the level width"
-        return len(self.map[0]) == LEVEL_WIDTH
+        return len(self.map[i]) == LEVEL_WIDTH
 
     def generate_items(self):
         """Places the items randomly in the map level"""
@@ -168,7 +171,7 @@ def gameplay():
 def main():
     pygame.init()
     screen = pygame.display.set_mode((LEVEL_DIMENSION))
-    screen.blit(intro, (0 ,0))
+    screen.blit(intro, (0, 0))
     screen.blit(start, (100, 50))
     pygame.display.flip()
     game = 1
@@ -180,5 +183,5 @@ def main():
             elif event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
                 game = 0
     
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
